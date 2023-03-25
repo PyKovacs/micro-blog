@@ -28,6 +28,7 @@ body {
 
 .navbar__logo {
     margin-right: 30px;
+    max-width: 80px;
 }
 
 .navbar__navigation {
@@ -74,8 +75,9 @@ body {
     font-size: 18px;
     padding: 12px 20px;
     border: none;
-    background-color:lightcyan;
+    background-color: rgb(217, 236, 243);
     border-bottom: 10px;
+    border-radius: 5px;
 }
 
 .form__submit {
@@ -105,6 +107,7 @@ body {
 
 .entry__date {
     color: lightslategray;
+    margin-left: 5px;
 }
 
 .entry__content {
@@ -113,7 +116,7 @@ body {
 }
 
 .footer {
-    background-color:  rgb(26, 83, 109);
+    background-color:  rgb(18, 46, 59);
     padding: 40px 0;
     margin: 50px 0 0 0;
     border-top: 4px solid black;
