@@ -2,9 +2,15 @@ from datetime import datetime
 from flask import Flask, render_template, request
 from pymongo import MongoClient
 
+import json
+
+DB_CONFIG = "db_config.json"
+
 def create_app():
+    with open(DB_CONFIG, "r") as db_conf:
+        db_creds = json.load(db_conf)
     app = Flask(__name__)
-    client = MongoClient("mongodb+srv://techie_blog_svc:tq03uEkgFh1meOGD@techie-blog-app.fvkbioh.mongodb.net/test")
+    client = MongoClient(f"mongodb+srv://{db_creds.get('username')}:{db_creds.get('password')}@techie-blog-app.fvkbioh.mongodb.net/test")
     app.db = client.techieblog
 
     @app.route("/", methods=['GET', 'POST'])
