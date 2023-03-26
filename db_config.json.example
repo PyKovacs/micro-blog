@@ -1,4 +1,3 @@
 {
-    "username": "<username>",
-    "password":"<password>"
+    "mongodb_uri":"<mongodb_uri>"
 }
