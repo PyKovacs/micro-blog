@@ -9,8 +9,9 @@ DB_CONFIG = "db_config.json"
 
 def create_app():
     """ Flask app factory. """
+
     with open(DB_CONFIG, "r") as db_conf:
-        db_uri = json.load(db_conf)
+        db_uri = json.load(db_conf).get('mongodb_uri')
     app = Flask(__name__)
     client = MongoClient(db_uri)
     app.db = client.techieblog
@@ -30,6 +31,10 @@ def create_app():
             )
             for entry in app.db.entries.find({})
         ]
-        return render_template("index.html", entries=entries_with_date)
+        return render_template("index.html", main='posts', entries=entries_with_date)
     
+    @app.route('/calendar')
+    def calendar():
+        return render_template('index.html', main='calendar')
+
     return app
