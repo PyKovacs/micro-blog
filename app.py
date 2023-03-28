@@ -31,10 +31,10 @@ def create_app():
             )
             for entry in app.db.entries.find({})
         ]
-        return render_template("index.html", main='posts', entries=entries_with_date)
-    
+        return render_template("posts.html", main='posts', entries=entries_with_date)
+
     @app.route('/calendar')
     def calendar():
-        return render_template('index.html', main='calendar')
+        return render_template('calendar.html', main='calendar')
 
     return app

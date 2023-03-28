@@ -22,34 +22,8 @@
         </ul>
     </header>
     <main class="main">
-        {% if main == 'posts' %}
-            <section>
-                <h1>Add new entry</h1>
-                <form class="form" method="POST">
-                    <p class="form__input">
-                        <label class="form__label" for="entry">Entry content:</label>
-                        <textarea class="form__textarea" name="content" id="entry"></textarea>
-                    </p>
-                    <button class="form__submit" type="submit">Add entry</button>
-                </form>
-            </section>
-            <section>
-                <h1>Recent posts</h1>
-                {% for entry in entries %}
-                    <article class="entry">
-                        <div>
-                            <h2 class="entry__title">{{ entry[0] | truncate(30, true) }}</h2>
-                            <time class="entry__date" datetime="{{ entry[1] }}"> | {{ entry[2] }}</time>
-                        </div>
-                        <p class="entry__content">
-                            {{ entry[0] }}
-                        </p>
-                    </article>
-                {% endfor %}
-            </section>
-        {% elif main == 'calendar' %}
-            <h2>Work in progress...</h2>
-        {% endif %}
+        {% block content %}
+        {% endblock %}
     </main>
     <footer class="footer">
         <div class="footer__content">
