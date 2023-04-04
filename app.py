@@ -63,7 +63,7 @@ def create_app():
                     session["user"] = username
                     flash(f'User "{session["user"]}" logged in.')
                     return redirect(url_for('home'))
-            flash('Incorrect credentials.')
+            flash('Incorrect credentials!')
 
         return render_template('login.html', main='login', user=session.get('user'))
 

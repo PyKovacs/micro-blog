@@ -2,15 +2,9 @@
 
 {% block content %}
 <form method="POST" class="login-form">
-    <label class="login-form__label">
-        Username
-        <input type="text" name="username">
-    </label>
-    <label class="login-form__label">
-        Password
-        <input type="password" name="password">
-    </label>
-    <button class="login__submit" type="submit">Sign up</button>
+    <input class="login-form__input" type="text" name="username" placeholder="Username">
+    <input class="login-form__input" type="password" name="password" placeholder="Password">
+    <button class="login-form__submit" type="submit">Sign up</button>
 </form>
 <p>
 <a href="{{ url_for('login') }}"> Log in</a> instead.

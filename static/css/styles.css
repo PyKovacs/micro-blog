@@ -58,6 +58,20 @@ body {
     border: 2px solid rgb(37, 116, 153);
 }
 
+.flashed_window {
+    margin: 30px 0;
+    padding: 0;
+}
+
+.flashed_window p {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 5px 10px;
+    margin: 0;
+    font-weight: bold;
+    color: rgb(37, 116, 153);
+}
+
 .main {
     max-width: 450px;
     margin: 0 auto;
@@ -98,6 +112,7 @@ body {
     border-radius: 8px;
     color: aliceblue;
     cursor: pointer;
+    transition: background-color 0.2s ease-out;
 }
 
 .form__submit:hover {
@@ -128,6 +143,38 @@ body {
 .entry__content {
     font-size: 16px;
     line-height: 150%;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form__input {
+    margin: 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: rgb(167, 189, 211);
+    border-radius: 3px;
+}
+
+.login-form__submit {
+    margin-top: 20px;
+    background-color: rgb(37, 116, 153);
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 30px;
+    border-radius: 8px;
+    color: aliceblue;
+    cursor: pointer;
+    transition: background-color 0.2s ease-out;
+}
+
+.login-form__submit:hover {
+    background-color: rgb(48, 149, 196);
 }
 
 .footer {
