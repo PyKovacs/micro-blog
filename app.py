@@ -1,10 +1,10 @@
 from datetime import datetime
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 from pymongo import MongoClient
 
 import json
 
-DB_CONFIG = "db_config.json"
+CONFIG = "config.json"
 
 
 def create_app():
@@ -12,9 +12,10 @@ def create_app():
 
     app = Flask(__name__)
 
-    with open(DB_CONFIG, "r") as db_conf:
-        db_uri = json.load(db_conf).get('mongodb_uri')
-        app.secret_key = json.load(db_conf).get('mongodb_uri')
+    with open(CONFIG, "r") as config:
+        conf_dict = json.load(config)
+        db_uri = conf_dict.get('mongodb_uri')
+        app.secret_key = conf_dict.get('secret_key')
 
     client = MongoClient(db_uri)
     app.db = client.techieblog
@@ -41,25 +42,40 @@ def create_app():
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
-        return render_template('login.html', main='login')
-    
+        if request.method == 'POST':
+            username = request.form.get('username')
+            password = request.form.get('password')
+
+            if users.get(username) == password:
+                session["user"] = users[username]
+                flash(f'{session["user"]} logged in.')
+                return redirect(url_for('home'))
+            flash('Incorrect credentials.')
+
+        return render_template('login.html', main='login', user=session.get('user'))
+
     @app.route('/logout', methods=['GET', 'POST'])
     def logout():
         if request.method == 'POST':
+            flash(f'{session["user"]} logged out.')
             session['user'] = None
-            redirect('/', 200)  # not working
-            
-        return render_template('logout.html', main='login')
-    
+
+            return redirect(url_for('home'))
+
+        return render_template('logout.html', main='login', user=session.get('user'))
+
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
         if request.method == 'POST':
             username = request.form.get('username')
             password = request.form.get('password')
-            
+
             users[username] = password
             session['user'] = username
             
-        return render_template('signup.html', main='signup')
+            flash(f'{username} successfully signed up!')
+            return redirect(url_for('home'))
+
+        return render_template('signup.html', main='signup', user=session.get('user'))
 
     return app

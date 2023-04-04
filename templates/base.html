@@ -25,6 +25,11 @@
             </li>
         </ul>
     </header>
+    <div class="flashed_window">
+        {% for message in get_flashed_messages() %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
     <main class="main">
         {% block content %}
         {% endblock %}
