@@ -17,7 +17,11 @@
                 <a href="/" class="navbar__link">Posts</a>
             </li>
             <li class="navbar__navigation-item">
-                <a href="/calendar" class="navbar__link">Calendar</a>
+                {% if not user  %}
+                    <a href="/login" class="navbar__link">Log in</a>
+                {% else %}
+                    <a href="/logout" class="navbar__link">{{ user }}</a>
+                {% endif %}
             </li>
         </ul>
     </header>

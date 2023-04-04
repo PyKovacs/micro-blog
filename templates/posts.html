@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <section>
+    <p style=
+        "color: gray;
+        margin-bottom: 70px;
+        {{ 'display: none;' if user }}">
+        <em>Log in to submit new posts.</em>
+    </p>
+    <section style="{{ 'display: none;' if not user }}">
         <h1>Add new entry</h1>
         <form class="form" method="POST">
             <p class="form__input">
@@ -12,12 +18,13 @@
         </form>
     </section>
     <section>
-        <h1>Recent posts</h1>
+        <h1>All posts</h1>
         {% for entry in entries %}
             <article class="entry">
                 <div>
+                    <p class="entry__user">{{ entry[1] }}</p>
                     <h2 class="entry__title">{{ entry[0] | truncate(30, true) }}</h2>
-                    <time class="entry__date" datetime="{{ entry[1] }}"> | {{ entry[2] }}</time>
+                    <time class="entry__date" datetime="{{ entry[2] }}"> | {{ entry[3] }}</time>
                 </div>
                 <p class="entry__content">
                     {{ entry[0] }}
