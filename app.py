@@ -10,13 +10,15 @@ DB_CONFIG = "db_config.json"
 def create_app():
     """ Flask app factory. """
 
+    app = Flask(__name__)
+
     with open(DB_CONFIG, "r") as db_conf:
         db_uri = json.load(db_conf).get('mongodb_uri')
-    app = Flask(__name__)
+        app.secret_key = json.load(db_conf).get('mongodb_uri')
+
     client = MongoClient(db_uri)
     app.db = client.techieblog
 
-    app.secret_key = 'FDrNddE0Zhih-OgTYoOHBcMfmXO9iuIH-vl2Jlw6usI'
     users = {}
 
     @app.route("/", methods=['GET', 'POST'])
