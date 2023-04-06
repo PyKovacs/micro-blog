@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 from pymongo import MongoClient
 from passlib.hash import pbkdf2_sha256
+from db import IDBCrud, MongoDBCrud
 
 import json
 
@@ -18,8 +19,9 @@ def create_app():
         db_uri = conf_dict.get('mongodb_uri')
         app.secret_key = conf_dict.get('secret_key')
 
-    client = MongoClient(db_uri)
-    app.db = client.techieblog
+    db_client = MongoClient(db_uri)
+    db_crud_entries = MongoDBCrud(db_client.techieblog.entries)
+    db_crud_users = MongoDBCrud(db_client.techieblog.users)
 
     users = {}
 
@@ -28,7 +30,7 @@ def create_app():
         if request.method == 'POST':
             entry_content = request.form.get('content')
             date = datetime.today().strftime('%Y-%m-%d')
-            app.db.entries.insert_one(
+            db_crud_entries.create(document=
                 {
                     'content': entry_content,
                     'date': date,
@@ -43,7 +45,7 @@ def create_app():
                 entry['date'],
                 datetime.strptime(entry['date'], '%Y-%m-%d').strftime('%b %d')
             )
-            for entry in app.db.entries.find({})
+            for entry in db_crud_entries.read(document={})
         ]
         return render_template(
             "posts.html",
@@ -56,10 +58,16 @@ def create_app():
     def login():
         if request.method == 'POST':
             username = request.form.get('username')
-            password = request.form.get('password')
-
-            if password and pbkdf2_sha256.identify(users.get(username, "")):
-                if pbkdf2_sha256.verify(password, users.get(username)):
+            input_password = request.form.get('password')
+            user_entry = db_crud_users.read(document={'username': username})
+            
+            try:
+                db_password = user_entry.next().get('password')
+            except StopIteration:
+                db_password = None
+            
+            if input_password and db_password:
+                if pbkdf2_sha256.identify(db_password) and pbkdf2_sha256.verify(input_password, db_password):
                     session["user"] = username
                     flash(f'User "{session["user"]}" logged in.')
                     return redirect(url_for('home'))
@@ -84,6 +92,12 @@ def create_app():
             hashed_pwd = pbkdf2_sha256.hash(request.form.get('password'))
 
             users[username] = hashed_pwd
+            db_crud_users.create(document=
+                                 {
+                                     'username': username,
+                                     'password': hashed_pwd
+                                 }
+                                )
             session['user'] = username
 
             flash(f'User "{username}" successfully signed up!')
