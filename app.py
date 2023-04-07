@@ -1,5 +1,6 @@
 from flask import Flask
-from routes import blog_app, secret_key
+from routes import blog_app
+from configuration import secret_key
 
 
 def create_app():
