@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask import flash, redirect, render_template, request, session, url_for
 from passlib.hash import pbkdf2_sha256
+from werkzeug.wrappers.response import Response
 
 from source.db import DBCrudInterface
 
@@ -11,7 +12,7 @@ class Router:
         self.db_users = db_users
         self.db_entries = db_entries
 
-    def home(self):
+    def home(self) -> str:
         if request.method == 'POST':
             entry_content = request.form.get('content')
             date = datetime.today().strftime('%Y-%m-%d')
@@ -34,7 +35,7 @@ class Router:
             user=session.get('user')
         )
 
-    def login(self):
+    def login(self) -> (Response | str):
         if request.method == 'POST':
             username = request.form.get('username')
             input_password = request.form.get('password')
@@ -55,7 +56,7 @@ class Router:
 
         return render_template('login.html', main='login', user=session.get('user'))
 
-    def logout(self):
+    def logout(self) -> (Response | str):
         if request.method == 'POST':
             flash(f'User "{session["user"]}" logged out.')
             session['user'] = None
@@ -63,7 +64,7 @@ class Router:
 
         return render_template('logout.html', main='login', user=session.get('user'))
 
-    def signup(self):
+    def signup(self) -> (Response | str):
         if request.method == 'POST':
             username = request.form.get('username')
             hashed_pwd = pbkdf2_sha256.hash(request.form.get('password'))

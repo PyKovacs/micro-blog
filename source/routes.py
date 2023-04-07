@@ -5,7 +5,7 @@ from source.configuration import db_uri
 from source.db import MongoDBCrud, get_db_crud_entries, get_db_crud_users
 from source.routing import Router
 
-db_client = MongoClient(db_uri)
+db_client: MongoClient = MongoClient(db_uri)
 router = Router(
     get_db_crud_users(MongoDBCrud, db_client),
     get_db_crud_entries(MongoDBCrud, db_client))
