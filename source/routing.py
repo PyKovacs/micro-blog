@@ -13,6 +13,8 @@ class Router:
         self.db_entries = db_entries
 
     def home(self) -> str:
+        """ Home page with all posts and new post window. """
+        
         if request.method == 'POST':
             entry_content = request.form.get('content')
             date = datetime.today().strftime('%Y-%m-%d')
@@ -36,6 +38,8 @@ class Router:
         )
 
     def login(self) -> (Response | str):
+        """ Login page with credentials form. """
+        
         if request.method == 'POST':
             username = request.form.get('username')
             input_password = request.form.get('password')
@@ -57,6 +61,8 @@ class Router:
         return render_template('login.html', main='login', user=session.get('user'))
 
     def logout(self) -> (Response | str):
+        """ Logout page with logout button. """
+        
         if request.method == 'POST':
             flash(f'User "{session["user"]}" logged out.')
             session['user'] = None
@@ -65,6 +71,8 @@ class Router:
         return render_template('logout.html', main='login', user=session.get('user'))
 
     def signup(self) -> (Response | str):
+        """ Signup page with credentials form. """
+        
         if request.method == 'POST':
             username = request.form.get('username')
             hashed_pwd = pbkdf2_sha256.hash(request.form.get('password'))

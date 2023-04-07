@@ -37,6 +37,11 @@ class MongoDBCrud:
             raise ValueError(f'Collection {repository} not found in repositories.')
 
     def create(self, **kwargs) -> bool:
+        """
+        Create an entry. Use 'document' argument for content.
+        Return True if write operation was successful.
+        """
+        
         document = kwargs.get('document')
         if document:
             result = self.db.insert_one(document)
@@ -45,6 +50,13 @@ class MongoDBCrud:
         return False
 
     def read(self, **kwargs) -> Cursor:
+        """
+        Read an entry. Use 'document' argument to provide 
+        key-pair value based on which client will search 
+        the db for correct entry.
+        
+        Return Cursor object.
+        """
         document = kwargs.get('document')
         return self.db.find(document)
 
@@ -59,8 +71,10 @@ class MongoDBCrud:
 #####################################################################
 
 def get_db_crud_users(active_crud: Type[DBCrudInterface], active_client: Any) -> DBCrudInterface:
+    """ Return crud object to make operations over users repository in db."""
     return active_crud(active_client, Repositories.USERS)
 
 
 def get_db_crud_entries(active_crud: Type[DBCrudInterface], active_client: Any) -> DBCrudInterface:
+    """ Return crud object to make operations over entries repository in db."""
     return active_crud(active_client, Repositories.ENTRIES)
